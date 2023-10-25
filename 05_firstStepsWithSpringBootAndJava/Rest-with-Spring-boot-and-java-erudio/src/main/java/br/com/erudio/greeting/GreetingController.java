@@ -1,4 +1,4 @@
-package br.com.erudio;
+package br.com.erudio.greeting;
 
 import java.util.concurrent.atomic.AtomicLong;
 

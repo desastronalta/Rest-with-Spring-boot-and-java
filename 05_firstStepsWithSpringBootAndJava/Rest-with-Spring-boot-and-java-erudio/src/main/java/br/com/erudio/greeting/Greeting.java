@@ -1,4 +1,4 @@
-package br.com.erudio;
+package br.com.erudio.greeting;
 
 public class Greeting {
 	private final long id;
