@@ -3,14 +3,43 @@ package br.com.erudio.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+/*
+ * através dessa notation dizemos para o hibernate que essa classe é uma tabela do banco de dados
+ */
+@Entity
+@Table(name = "person")
+/*
+ * a notion table é utilizada para passar para o hibernate que no banco essa
+ *  classe possui outro nome
+ */
+
+
 public class Person implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private long id;
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+	
+	
+	@Column(name = "first_name", nullable = false, length = 80)
 	private String firstName;
+	
+	@Column(name = "last_name", nullable = false, length = 80)
 	private String lastName;
+	
+	@Column(nullable = false, length = 100)
 	private String adress;
+	
+	@Column(nullable = false, length = 6)
 	private String gender;
 	public Person() {
 		
