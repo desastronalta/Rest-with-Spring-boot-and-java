@@ -19,7 +19,7 @@ import br.com.erudio.model.Person;
 import br.com.erudio.services.PersonServices;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 //requestmapping a nivel de controle serve para que todas as operações, relacionadas a person
 //sejam feitas nessa classe.
 public class PersonController {
