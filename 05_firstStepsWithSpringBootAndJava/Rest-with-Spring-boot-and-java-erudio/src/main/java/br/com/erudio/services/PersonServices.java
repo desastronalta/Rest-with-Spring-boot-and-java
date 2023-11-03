@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.erudio.data.vo.v1.PersonVO;
+import br.com.erudio.data.vo.v2.PersonVOV2;
 import br.com.erudio.exceptions.ResourceNotFoundEXception;
 import br.com.erudio.mapper.MyMapper;
+import br.com.erudio.mapper.custom.PersonMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repositories.PersonRepository;
 
@@ -19,6 +21,9 @@ public class PersonServices {
 
 	@Autowired
 	PersonRepository repository;
+	
+	@Autowired
+	PersonMapper mapper;
 
 	public List<PersonVO> findAll() {
 
@@ -36,10 +41,20 @@ public class PersonServices {
 		return MyMapper.parseObject(entity, PersonVO.class);
 	}
 
-	public PersonVO create(Person person) {
+	public PersonVO create(PersonVO person) {
 		// quando houver acesso a base de dados aqui vira a implementação do mesmo.
 		logger.info("Creating one person");
-		var vo = MyMapper.parseObject(repository.save(person), PersonVO.class);
+		var entity = MyMapper.parseObject(person, Person.class);
+		repository.save(entity);
+		var vo = MyMapper.parseObject(entity, PersonVO.class);
+		return vo;
+	}
+	
+	public PersonVOV2 create(PersonVOV2 person) {
+		logger.info("Creating one person");
+		var entity = mapper.convertEntityToVO(person);
+		repository.save(entity);
+		var vo = mapper.convertEntityToVO(entity);
 		return vo;
 	}
 

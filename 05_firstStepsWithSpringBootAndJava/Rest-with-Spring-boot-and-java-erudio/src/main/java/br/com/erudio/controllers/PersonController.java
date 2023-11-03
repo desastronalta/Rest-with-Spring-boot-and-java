@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.erudio.data.vo.v1.*;
-import br.com.erudio.model.Person;
 import br.com.erudio.services.PersonServices;
 
 @RestController
@@ -47,7 +46,7 @@ public class PersonController {
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE
 			)
-	public PersonVO create(@RequestBody Person person) {
+	public PersonVO create(@RequestBody PersonVO person) {
 		
 		return service.create(person);
 	}
