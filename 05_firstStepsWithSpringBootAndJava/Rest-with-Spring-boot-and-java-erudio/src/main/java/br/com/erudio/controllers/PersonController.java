@@ -29,14 +29,14 @@ public class PersonController {
 	private PersonServices service;
 	
 	@GetMapping(value = "/{id}",
-			produces=MediaType.APPLICATION_JSON_VALUE
+			produces= { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 			)
 	public PersonVO findById(@PathVariable(value = "id") Long id) {
 		
 	return service.findById(id);
 	}
 	@GetMapping(
-			produces=MediaType.APPLICATION_JSON_VALUE
+			produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 			)
 			public List<PersonVO> findAll() {
 		
@@ -44,16 +44,16 @@ public class PersonController {
 	}
 	// consumes serve para indicar que a aplicação recebe um tipo de dado.
 	@PostMapping(
-			consumes=MediaType.APPLICATION_JSON_VALUE,
-			produces=MediaType.APPLICATION_JSON_VALUE
+			consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+			produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 			)
 	public PersonVO create(@RequestBody Person person) {
 		
 		return service.create(person);
 	}
 	@PutMapping(
-			consumes=MediaType.APPLICATION_JSON_VALUE,
-			produces=MediaType.APPLICATION_JSON_VALUE
+			consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+			produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 			)
 	public PersonVO update(@RequestBody PersonVO person) {
 		

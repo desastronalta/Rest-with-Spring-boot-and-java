@@ -3,19 +3,32 @@ package br.com.erudio.data.vo.v1;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+/*
+ * utilizado para passar a ordem em que os dados serão exibidos.
+ */
+@JsonPropertyOrder({"id", "firstName", "lastName",  "adress","gender"})
 public class PersonVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
+	/*
+	 * utilizado para ignorar um atributo na serialização.
+	 */
+	@JsonIgnore
 	private Long id;
-	
+	/*
+	 * utilizado para passar como sera apresentada a variavel.
+	 */
+	@JsonProperty("first_name")
 	private String firstName;
-	
+	@JsonProperty("last_name")
 	private String lastName;
-	
+
 	private String adress;
-	
+
 	private String gender;
 	public PersonVO() {
 		
