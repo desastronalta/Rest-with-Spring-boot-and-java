@@ -5,15 +5,18 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 
-
-
+import br.com.erudio.model.Person;
 
 public class MyMapper {
+	
+	
 	// auxilia na converção de objetos para VOs de maneira dinamica e eficiente.
 	private static ModelMapper mapper = new ModelMapper();
 	
 	// utilizado para retornar um VO de forma genérica.
 	public static  <O , D> D parseObject(O origin, Class<D> destinaiton) {
+		if(origin.getClass().equals(Person.class)) {
+		}
 		return mapper.map(origin, destinaiton);
 	}
 	// retonna uma Lista de VOs de forma genérica.
