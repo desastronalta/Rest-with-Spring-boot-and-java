@@ -119,7 +119,7 @@ public class PersonController {
 		return service.update(person);
 	}
 	@DeleteMapping(value = "/{id}")
-	@Operation(summary = "create", description = "Create a people", 
+	@Operation(summary = "delete", description = "delete a people", 
 	tags = {"People"}, 
 	responses = {
 		@ApiResponse(description = "No content", responseCode= "204", 

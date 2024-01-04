@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
+
+
 /*
  * utilizado para passar a ordem em que os dados serão exibidos.
  */
