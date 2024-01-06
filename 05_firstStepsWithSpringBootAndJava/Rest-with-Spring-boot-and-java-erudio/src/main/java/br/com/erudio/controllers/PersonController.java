@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+/*
+ * @CrossOrigin no nivel de controler serve para passar que todas as operações serão liberadas apenas para os dominios
+ * declarados em "origins"
+ */
 @RestController
 @RequestMapping("/api/person/v1")
 @Tag(name = "People", description = "Endpoints for menager peoples")
@@ -34,6 +38,10 @@ public class PersonController {
 	// esta notação serve para indicar ao inpringboot onde tera um auto complete do services.
 	private PersonServices service;
 	
+	/*
+	 * na linha de código abaixo estamos especificando que o acesso sera somente para o dominio descrito abaixo.
+	 */
+	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/{id}",
 			produces= { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 			)
@@ -79,6 +87,7 @@ public class PersonController {
 	return service.findAll();
 	}
 	// consumes serve para indicar que a aplicação recebe um tipo de dado.
+	@CrossOrigin(origins = {"http://localhost:8080", "http://erudio.com.br"})
 	@PostMapping(
 			consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
 			produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
