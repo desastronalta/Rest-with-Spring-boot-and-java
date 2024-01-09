@@ -14,19 +14,20 @@ public class TokenVO implements Serializable{
 	private Date expiration;
 	private String accesToken;
 	private String refreshToken;
+	
 	public TokenVO(String username, 
 			boolean authenticated, 
 			Date created, 
 			Date expiration, 
-			String accesToken,
-			String refreshToken) {
+			String accessToken,
+			String refreshToken2) {
 		
 		this.username = username;
 		this.authenticated = authenticated;
 		this.created = created;
 		this.expiration = expiration;
-		this.accesToken = accesToken;
-		this.refreshToken = refreshToken;
+		this.accesToken = accessToken;
+		this.refreshToken = refreshToken2;
 	}
 	public String getUsername() {
 		return username;
