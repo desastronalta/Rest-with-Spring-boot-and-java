@@ -31,13 +31,12 @@ public class SecutiryConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		Map<String, PasswordEncoder> encoders = new HashMap<>();
-		Pbkdf2PasswordEncoder Pbkdf2encoder = new Pbkdf2PasswordEncoder("", 8, 185000,
+		Pbkdf2PasswordEncoder pbkdf2encoder = new Pbkdf2PasswordEncoder("", 8, 185000,
 				SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
-		encoders.put("pbkdf2", Pbkdf2encoder);
+		encoders.put("pbkdf2", pbkdf2encoder);
 		DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
-		passwordEncoder.setDefaultPasswordEncoderForMatches(Pbkdf2encoder);
-		return passwordEncoder();
-
+		passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2encoder);
+		return passwordEncoder;
 	}
 	@Bean
 	AuthenticationManager authenticationManagerBean(AuthenticationConfiguration config) throws Exception{
