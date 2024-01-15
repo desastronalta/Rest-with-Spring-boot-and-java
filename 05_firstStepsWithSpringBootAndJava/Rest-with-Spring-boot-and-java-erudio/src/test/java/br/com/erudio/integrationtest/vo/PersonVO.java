@@ -3,15 +3,17 @@ package br.com.erudio.integrationtest.vo;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 
 
-
-
+/*
+ * essa annotation é passada para que o Jackson consiga compreender como um conteudo em XML uma vez que
+ * por padrao ele busca esta annotation
+ */
+@XmlRootElement
 public class PersonVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

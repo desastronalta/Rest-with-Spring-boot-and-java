@@ -50,6 +50,17 @@ public class JwtTokenProvider {
 		var refreshToken = getRefreshToken(username, roles, now);
 		return new TokenVO(username, true, now, validity, accessToken, refreshToken);
 	}
+	
+	public TokenVO refreshToken(String refreshToken) {
+		if(refreshToken.contains("bearer ")) {
+			refreshToken.substring("bearer ".length());
+		}
+		JWTVerifier verifier = JWT.require(algorithm).build();
+		DecodedJWT decodedJWT = verifier.verify(refreshToken);
+		String username = decodedJWT.getSubject();
+		List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+		return createAccessToken(username, roles);
+	}
 
 	private String getRefreshToken(String username, List<String> roles, Date now) {
 		Date validityRefreshToken = new Date(now.getTime() + (validityInMS * 3));
