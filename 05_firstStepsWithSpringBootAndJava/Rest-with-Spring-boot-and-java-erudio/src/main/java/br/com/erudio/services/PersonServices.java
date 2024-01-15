@@ -1,12 +1,14 @@
 package br.com.erudio.services;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import br.com.erudio.controllers.PersonController;
 import br.com.erudio.data.vo.v1.PersonVO;
@@ -14,6 +16,7 @@ import br.com.erudio.exceptions.ResourceNotFoundEXception;
 import br.com.erudio.mapper.custom.PersonMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 // Tem como funcionalidade instanciar o objeto dentro da classe;
@@ -25,13 +28,15 @@ public class PersonServices {
 	
 	@Autowired
 	PersonMapper mapper;
-	public List<PersonVO> findAll() {
+	public Page<PersonVO> findAll(Pageable pageable) {
 
 		logger.info("Finding all Persons");
-
-		var persons = mapper.convertListEntityToVO(repository.findAll());
-		persons.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-		return persons;
+		var personPage = repository.findAll(pageable);
+		var personVOsPage = personPage.map(p -> mapper.convertEntityToVO(p));
+		
+		personVOsPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+		
+		return personVOsPage;
 	}
 
 	public PersonVO findById(Long id) {
@@ -73,9 +78,23 @@ public class PersonServices {
 	public void delete(Long id) {
 		// quando houver acesso a base de dados aqui vira a implementação do mesmo.
 		logger.info("Deleting one person");
+		
 		var entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundEXception("No records found for this ID."));
+		
 		repository.delete(entity);
 
+	}
+	//estamos passando para o Spring data que este metódo esta sendo gerenciado de outra forma pois há dados que serão
+	//modificados.
+	@Transactional
+	public PersonVO disabelPerson(Long id) {
+		repository.disablePerson(id);
+		var entity = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundEXception("No records found for this ID."));
+		PersonVO vo = mapper.convertEntityToVO(entity);
+		vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return vo;
+		
 	}
 }

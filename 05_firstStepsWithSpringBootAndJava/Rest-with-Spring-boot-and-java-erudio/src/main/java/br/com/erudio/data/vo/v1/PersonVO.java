@@ -34,10 +34,33 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
 	private String adress;
 
 	private String gender;
+	
+	private boolean enabled;
+	
 	public PersonVO() {
 		
 	}
 	
+	
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+
+	public void setKey(Long key) {
+		this.key = key;
+	}
+
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+
+
 	public long getKey() {
 		return key;
 	}
@@ -70,22 +93,32 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
+
+
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(adress, firstName, gender, key, lastName);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(adress, enabled, firstName, gender, key, lastName);
+		return result;
 	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		PersonVO other = (PersonVO) obj;
-		return Objects.equals(adress, other.adress) && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(gender, other.gender) && key == other.key && Objects.equals(lastName, other.lastName);
+		return Objects.equals(adress, other.adress) && enabled == other.enabled
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(gender, other.gender)
+				&& Objects.equals(key, other.key) && Objects.equals(lastName, other.lastName);
 	}
+	
 	
 }
