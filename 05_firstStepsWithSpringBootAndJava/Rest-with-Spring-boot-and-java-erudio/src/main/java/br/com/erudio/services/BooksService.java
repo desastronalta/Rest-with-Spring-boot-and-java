@@ -1,11 +1,15 @@
 package br.com.erudio.services;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.stereotype.Service;
 
 import br.com.erudio.controllers.BooksController;
 import br.com.erudio.data.vo.v1.BookVO;
@@ -21,12 +25,21 @@ public class BooksService {
 	BooksRepository repository;
 	
 	@Autowired
+	PagedResourcesAssembler<BookVO> assembler;
+	
+	@Autowired
 	MyMapper mapa;
 	
-	public List<BookVO> findAll(){
-		var vo = mapa.parseListObject(repository.findAll(),BookVO.class);
-		vo.stream().forEach(p-> p.add(linkTo(methodOn(BooksController.class).findById(p.getId())).withSelfRel()));
-		return vo; 
+	public PagedModel<EntityModel<BookVO>> findAll(Pageable pageable){	
+		
+		var bookPage = repository.findAll(pageable);
+		var bookVosPage = bookPage.map(p -> mapa.parseObject(p, BookVO.class));
+		
+		bookVosPage.map(p -> p.add(linkTo(methodOn(BooksController.class).findById(p.getId())).withSelfRel()));
+		
+		Link link = linkTo(methodOn(BooksController.class)
+				.findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc", "author")).withSelfRel();
+		return assembler.toModel(bookVosPage, link);
 	}
 	
 	public BookVO findById(Long name) {
@@ -58,5 +71,13 @@ public class BooksService {
 		var entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundEXception("No records found for this name."));
 		repository.delete(entity);
+	}
+
+	public String validateField(String field) {
+		
+		if(field.equals("author") || field.equals("title") || field.equals("launchDate") || field.equals("price")) {
+			return field;
+		}else return "author";
+	
 	}
 }
