@@ -50,6 +50,22 @@ public class PersonServices {
 						"asc", "firstName")).withSelfRel();
 		return assembler.toModel(personVOsPage , link ) ;
 	}
+	public PagedModel<EntityModel<PersonVO>> findByName(String firstName ,Pageable pageable) {
+		
+		logger.info("Finding all Persons");
+		
+		var personPage = repository.findPersonsByName(firstName , pageable);
+		var personVOsPage = personPage.map(p -> mapper.convertEntityToVO(p));
+		
+		personVOsPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+		
+		Link link = linkTo(
+				methodOn(PersonController.class)
+				.findAll(pageable.getPageNumber(),
+						pageable.getPageSize(), 
+						"asc", "firstName")).withSelfRel();
+		return assembler.toModel(personVOsPage , link ) ;
+	}
 
 	public PersonVO findById(Long id) {
 

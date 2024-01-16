@@ -103,6 +103,41 @@ public class PersonController {
 					
 				return ResponseEntity.ok(service.findAll(pageable));
 	}
+	
+	@GetMapping(value = "/findPersonByName/{firstName}" ,
+			produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+			)
+	@Operation(summary = "FindAll", description = "find all peoples", 
+	tags = {"People"}, 
+	responses = {
+			@ApiResponse(description = "Success", responseCode= "200", 
+					content = {
+							@Content(
+									mediaType = "application/json",
+									array = @ArraySchema(schema = @Schema(implementation = PersonVO.class))
+									)
+							
+			}),
+			
+			@ApiResponse(description = "Bad request", responseCode= "400", content = @Content),
+			@ApiResponse(description = "Anauthorized", responseCode= "401", content = @Content),
+			@ApiResponse(description = "Not found", responseCode= "404", content = @Content),
+			@ApiResponse(description = "Internal server error", responseCode= "500", content = @Content),
+	})
+	public ResponseEntity<PagedModel<EntityModel<PersonVO>>> findPersonByName(
+			@PathVariable(value = "firstName") String firstName,
+			@RequestParam(value = "page" , defaultValue = "0") Integer page,
+			@RequestParam(value = "size" , defaultValue = "12") Integer size,
+			@RequestParam(value = "direction" , defaultValue = "asc") String direction
+			){
+		var sortDirection = "desc".equalsIgnoreCase(direction) 
+				? Direction.DESC : Direction.ASC;
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+		
+		return ResponseEntity.ok(service.findByName(firstName, pageable));
+	}
+	
 	// consumes serve para indicar que a aplicação recebe um tipo de dado.
 	@CrossOrigin(origins = {"http://localhost:8080", "http://erudio.com.br"})
 	@PostMapping(
