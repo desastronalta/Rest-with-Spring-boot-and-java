@@ -35,7 +35,7 @@ public class AuthServices {
 			
 			var user = repository.findByUserName(username);
 			
-			var tokenResponse = new TokenVO(null, false, null, null, null, null);
+			var tokenResponse = new TokenVO();
 			
 			if (user != null) {
 				tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
@@ -53,7 +53,7 @@ public class AuthServices {
 		
 			var user = repository.findByUserName(username);
 			
-			var tokenResponse = new TokenVO(null, false, null, null, null, null);
+			var tokenResponse = new TokenVO();
 			
 			if (user != null) {
 				tokenResponse = tokenProvider.refreshToken(refreshToken);
